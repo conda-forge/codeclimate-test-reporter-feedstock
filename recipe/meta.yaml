@@ -7,11 +7,11 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/codeclimate-test-reporter-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/codeclimate-test-reporter-{{ version }}.tar.gz
   sha256: d4a5962323e0ebf7d0e9959bcb605910dbb937ff93b21035421b7967dc242865
 
 build:
-  number: 0
+  number: 1
   noarch: python
   entry_points:
     - codeclimate-test-reporter=codeclimate_test_reporter.__main__:run
@@ -20,10 +20,10 @@ build:
 requirements:
   host:
     - pip
-    - python >=3.6
+    - python {{ python_min }}
   run:
     - coverage >=4.0
-    - python >=3.6
+    - python >={{ python_min }}
     - requests
 
 test:
@@ -35,6 +35,7 @@ test:
     - codeclimate-test-reporter --help
   requires:
     - pip
+    - python {{ python_min }}
 
 about:
   home: http://github.com/codeclimate/python-test-reporter
