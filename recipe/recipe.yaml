@@ -1,0 +1,66 @@
+schema_version: 1
+
+context:
+  name: codeclimate-test-reporter
+  version: "0.2.3"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/codeclimate-test-reporter-${{ version }}.tar.gz
+  sha256: d4a5962323e0ebf7d0e9959bcb605910dbb937ff93b21035421b7967dc242865
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  python:
+    entry_points:
+      - codeclimate-test-reporter=codeclimate_test_reporter.__main__:run
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - setuptools
+  run:
+    - coverage >=4.0
+    - python >=${{ python_min }}
+    - requests
+
+tests:
+  - python:
+      imports:
+        - codeclimate_test_reporter
+        - codeclimate_test_reporter.components
+      pip_check: true
+      python_version:
+        - ${{ python_min }}
+        - "*"
+  - requirements:
+      run:
+        - pip
+        - python ${{ python_min }}.*
+    script:
+      - codeclimate-test-reporter --help
+
+about:
+  license: MIT
+  license_file: LICENSE.txt
+  summary: Uploads Python test coverage data to Code Climate
+  description: |
+    These configuration instructions refer to a language-specific test
+    reporter which is now deprecated in favor of our new unified test
+    reporter client. The new test reporter is faster, distributed as a
+    static binary, has support for parallelized CI builds, and will
+    receive ongoing support by the team here. The existing test reporters
+    for Ruby, Python, PHP, and Javascript are now deprecated.
+  homepage: http://github.com/codeclimate/python-test-reporter
+  repository: http://github.com/codeclimate/python-test-reporter
+  documentation: http://github.com/codeclimate/python-test-reporter
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
